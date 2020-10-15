@@ -19,7 +19,7 @@ const users = require('./json/users.json');
  */
 const getUserWithEmail = function(email) {
   return pool.query(
-    `SELECT * FROM users WHERE email LIKE $1;`, [email]
+    `SELECT * FROM users WHERE email = $1;`, [email]
   ).then(res => {
     return res.rows[0];
   })
