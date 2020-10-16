@@ -76,9 +76,9 @@ const getAllReservations = function (guest_id, limit = 10) {
   GROUP BY properties.id, reservations.id
   ORDER BY reservations.start_date
   LIMIT $2;`
-  , [guest_id, limit]) 
+  , [guest_id, limit])
   .then(res => {
-    return res.rows}) 
+    return res.rows})
   .catch(err => null)
 }
 exports.getAllReservations = getAllReservations;
@@ -111,33 +111,33 @@ const getAllProperties = function(options, limit = 10) {
   `;
   
   //Injection function 
-  const keyword = (n) => {
+  const key = (n) => {
     const output = queryParams.length > n ? ' AND' : 'WHERE'; 
     return output;
-  } 
+  }
 
   // Checking if the fields were filled out
   if (options.city) {
     queryParams.push(`%${options.city}%`); 
     queryString += `WHERE city LIKE $${queryParams.length}`;
-  } 
+  }
   
   if (options.owner_id) {
-    queryParams.push(options.owner_id); 
-    queryString += `${keyword(1)} users.id = $${queryParams.length}`;
-  } 
+    queryParams.push(options.owner_id);
+    queryString += `${key(1)} users.id = $${queryParams.length}`;
+  }
 
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
     queryParams.push(options.minimum_price_per_night, options.maximum_price_per_night); 
-    queryString += `${keyword(2)} cost_per_night >= $${queryParams.length - 1} AND 
+    queryString += `${key(2)} cost_per_night >= $${queryParams.length - 1} AND 
     cost_per_night <= $${queryParams.length}`;
-  } 
+  }
 
   if (options.minimum_rating) {
     queryParams.push(options.minimum_rating) 
-    queryString += `${keyword(1)} rating >= $${queryParams.length}`;
+    queryString += `${key(1)} rating >= $${queryParams.length}`;
   }
-  
+
 //==================================================================================
   
 queryParams.push(limit);
